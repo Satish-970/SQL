@@ -1,0 +1,152 @@
+BOARD INFINITY PROJECT
+DATABASE MANAGEMENT SYSTEM & SQL
+DATASET : HR case study
+DATABASE LINK : https://www.kaggle.com/datasets/sirajahmad/hr-schema-mysql
+
+Tables Created: 
+Location
+Countries 
+Regions
+Departments
+Jobs
+Employees
+Job history
+
+Views : 
+Emp_details_view
+Queries :
+
+Query 1 :  
+Write a query to find the addresses (location_id, street_address, city, state_province, country_name) of all the departments.
+Solution : 
+SELECT l.location_id, l.street_address, l.city, l.state_province, c.country_name FROM departments d JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id;
+Output : 
+
+
+
+Query 2 : 
+Write a query to find the name (first_name, last name), department ID and name of all the employees.
+Solution :
+SELECT e.first_name, e.last_name, d.department_id, d.department_name FROM employees e JOIN departments d ON e.department_id = d.department_id;
+
+
+
+
+
+Output : 
+
+
+Query 3 : 
+Write a query to find the name (first_name, last_name), job, department ID
+and name of the employees who works in London
+Solution : 
+SELECT e.first_name, e.last_name, j.job_title, d.department_id, d.department_name FROM employees e JOIN departments d ON e.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN jobs j ON e.job_id = j.job_id WHERE l.city = 'London';
+Output : 
+
+Query 4 :
+Write a query to find the employee id, name (last_name) along with their manager_id and name (last_name)
+Solution : 
+SELECT e.employee_id, e.last_name AS employee_last_name, e.manager_id, m.last_name AS manager_last_name FROM employees e LEFT JOIN employees m ON e.manager_id = m.employee_id;
+Output : 
+
+
+Query 5 : 
+Write a query to find the name (first_name, last_name) and hire date of the
+employees who was hired after 'Jones'
+Solution : 
+SELECT e.first_name, e.last_name, e.hire_date FROM employees e JOIN employees j ON j.last_name = 'Jones' WHERE e.hire_date > j.hire_date;
+Output :
+Query 6 : 
+Write a query to get the department name and number of employees in the department
+Solution : 
+SELECT d.department_name, COUNT(e.employee_id) AS num_employees FROM departments d LEFT JOIN employees e ON d.department_id = e.department_id GROUP BY d.department_name;
+Output : 
+
+Query 7 :
+Write a query to display department name, name (first_name, last_name), hire date, salary of the manager for all managers whose experience is more than 15 years
+Solution : 
+SELECT d.department_name, e.first_name, e.last_name, e.hire_date, e.salary FROM employees e JOIN departments d ON e.department_id = d.department_id WHERE e.manager_id IS NULL AND (SYSDATE - e.hire_date) / 365.25 > 15;
+Output : 
+
+
+
+
+Query 8 : 
+Write a query to find the name (first_name, last_name) and the salary of the employees who have a higher salary than the employee whose last_name='Bull'
+Solution : 
+SELECT e.first_name, e.last_name,e.salary FROM employees e JOIN employees b ON b.last_name = 'Bull' WHERE e.salary > b.salary;
+Output : 
+
+
+Query 9 :
+Write a query to find the name (first_name, last_name) of all employees who works in the IT department
+Solution : 
+SELECT e.first_name,e.last_name FROM employees e JOIN departments d ON e.department_id = d.department_id WHERE d.department_name = 'IT'
+Output : 
+
+
+Query 10 :
+Write a query to find the name (first_name, last_name) of the employees who have a manager and worked in a USA based department
+Solution : 
+SELECT e.first_name, e.last_name FROM employees e JOIN departments d ON e.department_id = d.department_id JOIN locations l ON d.location_id = l.location_id JOIN countries c ON l.country_id = c.country_id WHERE e.manager_id IS NOT NULL AND l.country_id = 'US';
+Output : 
+
+
+
+
+
+
+
+
+
+
+
+
+Query 11 :
+Write a query to find the name (first_name, last_name), and salary of the employees whose salary is greater than the average salary
+Solution : 
+SELECT e.first_name, e.last_name, e.salary FROM employees e WHERE e.salary > (SELECT AVG(salary) FROM employees);
+
+
+
+Output : 
+
+
+Query 12 :
+Write a query to find the name (first_name, last_name), and salary of the employees whose salary is equal to the minimum salary for their job grade
+Solution :
+SELECT e.first_name, e.last_name, e.salary FROM employees e JOIN jobs j ON e.job_id = j.job_id WHERE e.salary = j.min_salary;
+Output : 
+
+
+Query 13 :
+Write a query to find the name (first_name, last_name), and salary of the employees who earns more than the average salary and works in any of the IT departments
+Solution : 
+SELECT e.first_name,e.last_name,e.salary FROM employees e JOIN departments d ON e.department_id = d.department_id WHERE e.salary > (SELECT AVG(salary) FROM employees) AND d.department_name LIKE '%IT%';
+Output : 
+
+
+Query 14 :
+Write a query to find the name (first_name, last_name), and salary of the employees who earn the same salary as the minimum salary for all departments.
+
+Solution : 
+SELECT e.first_name,e.last_name,e.salary FROM employees e JOIN departments d ON e.department_id = d.department_id WHERE e.salary = (SELECT MIN(salary) FROM employees);
+
+Output : 
+
+
+
+Query 15 :
+Write a query to find the name (first_name, last_name) and salary of the employees who earn a salary that is higher than the salary of all the Shipping Clerk (JOB_ID = 'SH_CLERK'). Sort the results of the salary of the lowest to highest
+Solution :
+SELECT e.first_name,e.last_name,e.salary FROM employees e WHERE e.salary > (SELECT MAX(salary) FROM employees WHERE job_id = 'SH_CLERK') ORDER BY e.salary ASC;
+
+
+
+
+
+
+
+Output : 
+
+
